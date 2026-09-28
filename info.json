@@ -1,0 +1,11 @@
+{
+  "name": "quidquid-blueprints",
+  "version": "0.0.1",
+  "title": "Quidquid Blueprints",
+  "author": "sakuro",
+  "description": "Quidquid Blueprints",
+  "factorio_version": "2.1",
+  "dependencies": [
+    "base >= 2.1"
+  ]
+}
