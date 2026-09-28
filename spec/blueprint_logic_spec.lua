@@ -24,7 +24,13 @@ package.preload["__quidquid__.lib.api"] = function()
     if display == nil and internal == nil then
       return nil
     end
-    return { score = 1, display_ranges = display or {}, internal_ranges = internal or {} }
+    -- The mock has no real scores to break a tie with, so display wins whenever it
+    -- matches -- mirroring the real Matcher:match, which only ever hands ranges back
+    -- for the field that won.
+    if display ~= nil then
+      return { score = 1, display_ranges = display, internal_ranges = {} }
+    end
+    return { score = 1, display_ranges = {}, internal_ranges = internal }
   end
 
   return {
@@ -34,7 +40,9 @@ package.preload["__quidquid__.lib.api"] = function()
     rich_text = {
       searchable = function(value)
         table.insert(rich_text_calls.searchable, value)
-        local origins = {}
+        -- `source` lets a test tell which value (label vs. book path) a set of
+        -- origins came from, without reproducing real byte-origin tracking.
+        local origins = { source = value }
         for i = 1, #value do
           origins[i] = i
         end
@@ -664,6 +672,33 @@ describe("BlueprintLogic", function()
       assert.are.equal("Book", candidate.search_internal_name)
       assert.are.same({ "", { "gui.inventory" }, " › " }, candidate.search_internal_prefix)
       assert.is_nil(candidate.secondary_text)
+    end)
+
+    -- Distinguishes the map_ranges call made for a candidate's label from the one
+    -- made for its book path, since the mock's searchable stamps origins.source with
+    -- the exact value it was given.
+    local function map_ranges_call_for(source)
+      for _, call in ipairs(rich_text_calls.map_ranges) do
+        if call.origins.source == source then
+          return call
+        end
+      end
+      return nil
+    end
+
+    it("pairs each map_ranges call with the origins of the field that matched", function()
+      BlueprintLogic.build_candidates("stations", "en", locations, always_valid)
+      local internal_call = map_ranges_call_for("[item=rail]鉄道 › Stations")
+
+      assert.is_not_nil(internal_call)
+      assert.is_true(#internal_call.ranges > 0)
+
+      rich_text_calls.map_ranges = {}
+      BlueprintLogic.build_candidates("inbound", "en", locations, always_valid)
+      local display_call = map_ranges_call_for("[virtual-signal=signal-input]Inbound")
+
+      assert.is_not_nil(display_call)
+      assert.is_true(#display_call.ranges > 0)
     end)
   end)
 end)
