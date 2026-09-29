@@ -4,7 +4,7 @@ local function action(name, input_name, interface)
     name = "quidquid-blueprints-" .. name,
     data_type = "quidquid.action",
     data = {
-      contract_version = 3,
+      contract_version = 4,
       types = { "blueprint" },
       label = { "quidquid-blueprints.action-" .. name .. "-blueprint" },
       hint = { "quidquid-blueprints.action-" .. name .. "-blueprint-hint" },
