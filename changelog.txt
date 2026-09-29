@@ -1,5 +1,6 @@
 ---------------------------------------------------------------------------------------------------
-Version: Unreleased
+Version: 0.6.0
+Date: 2026-09-29
   Changes:
     - A per-player setting chooses whether blueprints appear in Quidquid's default search
   Modding:
