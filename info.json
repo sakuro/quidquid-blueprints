@@ -1,6 +1,6 @@
 {
   "name": "quidquid-blueprints",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "title": "Quidquid: Blueprints",
   "author": "sakuro",
   "description": "Adds blueprint search to the Quidquid palette: blueprints, books and planners in the inventory and the blueprint library, to hold, copy or export.",
