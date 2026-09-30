@@ -397,12 +397,11 @@ end
 --- An unlabelled record is never a candidate (accepted: there is nothing to find it
 --- by), but an unlabelled book is still walked and left out of its contents' path.
 ---@param query string
----@param locale string|nil  the player's locale, for display-name normalization
 ---@param locations table  array of { name, nodes }, nodes as `to_nodes` or `item_nodes` returns them
 ---@param is_valid_sprite_path function  (path) -> boolean; the runtime check
 ---@return table  candidates; see EXTENDING.md "Candidates"
-function BlueprintLogic.build_candidates(query, locale, locations, is_valid_sprite_path)
-  local matcher = api.matcher(query, locale)
+function BlueprintLogic.build_candidates(query, locations, is_valid_sprite_path)
+  local matcher = api.matcher(query)
   local candidates = {}
   local function visit(nodes, location_name, indices, ancestors)
     for _, node in ipairs(nodes) do

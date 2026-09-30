@@ -20,7 +20,7 @@ local function search(query, player_index)
   end
   table.insert(locations, { name = "my", nodes = BlueprintLogic.to_nodes(player.blueprints) })
   table.insert(locations, { name = "game", nodes = BlueprintLogic.to_nodes(game.blueprints) })
-  return BlueprintLogic.build_candidates(query, player.locale, locations, is_valid_sprite_path)
+  return BlueprintLogic.build_candidates(query, locations, is_valid_sprite_path)
 end
 
 --- Adds this source's remote interface, named by its declaration in prototypes/sources.lua.
