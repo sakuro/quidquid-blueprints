@@ -34,7 +34,7 @@ package.preload["__quidquid__.lib.api"] = function()
   end
 
   return {
-    matcher = function(query, _locale)
+    matcher = function(query)
       return setmetatable({ query = query }, Matcher)
     end,
     rich_text = {
@@ -541,7 +541,7 @@ describe("BlueprintLogic", function()
     end
 
     it("builds a candidate from a nested blueprint", function()
-      local candidate = by_id(BlueprintLogic.build_candidates("inbound", "en", locations, always_valid))["game/1/2/7"]
+      local candidate = by_id(BlueprintLogic.build_candidates("inbound", locations, always_valid))["game/1/2/7"]
 
       assert.are.equal("blueprint", candidate.type)
       assert.are.equal("blueprint", candidate.record_type)
@@ -560,7 +560,7 @@ describe("BlueprintLogic", function()
     end)
 
     it("searches the label and the book path through rich_text.searchable", function()
-      BlueprintLogic.build_candidates("inbound", "en", locations, always_valid)
+      BlueprintLogic.build_candidates("inbound", locations, always_valid)
 
       local seen = {}
       for _, value in ipairs(rich_text_calls.searchable) do
@@ -571,7 +571,7 @@ describe("BlueprintLogic", function()
     end)
 
     it("takes the label's ranges from rich_text.map_ranges", function()
-      local candidate = by_id(BlueprintLogic.build_candidates("inbound", "en", locations, always_valid))["game/1/2/7"]
+      local candidate = by_id(BlueprintLogic.build_candidates("inbound", locations, always_valid))["game/1/2/7"]
 
       assert.is_true(#candidate.search_display_ranges > 0)
       for _, range in ipairs(candidate.search_display_ranges) do
@@ -580,7 +580,7 @@ describe("BlueprintLogic", function()
     end)
 
     it("finds records through an abbreviated book and leaves that part unhighlighted", function()
-      local candidates = by_id(BlueprintLogic.build_candidates("鉄道", "ja", locations, always_valid))
+      local candidates = by_id(BlueprintLogic.build_candidates("鉄道", locations, always_valid))
       local candidate = candidates["game/1/2/7"]
 
       assert.is_not_nil(candidate)
@@ -588,7 +588,7 @@ describe("BlueprintLogic", function()
     end)
 
     it("highlights the nearest book in the displayed path", function()
-      local candidate = by_id(BlueprintLogic.build_candidates("stations", "en", locations, always_valid))["game/1/2/7"]
+      local candidate = by_id(BlueprintLogic.build_candidates("stations", locations, always_valid))["game/1/2/7"]
       local shown = candidate.search_internal_name
 
       assert.is_true(#candidate.search_internal_ranges > 0)
@@ -600,7 +600,7 @@ describe("BlueprintLogic", function()
     end)
 
     it("lists books and planners, and skips unlabelled records", function()
-      local candidates = by_id(BlueprintLogic.build_candidates("t", "en", locations, always_valid))
+      local candidates = by_id(BlueprintLogic.build_candidates("t", locations, always_valid))
 
       assert.are.equal("item/deconstruction-planner", candidates["my/1"].icon)
       assert.is_nil(candidates["my/1"].search_internal_name)
@@ -608,32 +608,32 @@ describe("BlueprintLogic", function()
     end)
 
     it("finds a labelled blueprint through an unlabelled book, leaving that book out of the path", function()
-      local candidate = by_id(BlueprintLogic.build_candidates("loose", "en", locations, always_valid))["game/5/6"]
+      local candidate = by_id(BlueprintLogic.build_candidates("loose", locations, always_valid))["game/5/6"]
 
       assert.is_not_nil(candidate)
       assert.is_nil(candidate.search_internal_name)
     end)
 
     it("puts only the description in the tooltip of a top-level book", function()
-      local candidate = by_id(BlueprintLogic.build_candidates("rail", "en", locations, always_valid))["game/1"]
+      local candidate = by_id(BlueprintLogic.build_candidates("rail", locations, always_valid))["game/1"]
 
       assert.are.same({ tooltip = "grid" }, candidate.annotation)
     end)
 
     it("uses an inventory item's own name for its icon", function()
-      local candidate = by_id(BlueprintLogic.build_candidates("mine", "en", locations, always_valid))["inv/4"]
+      local candidate = by_id(BlueprintLogic.build_candidates("mine", locations, always_valid))["inv/4"]
 
       assert.are.equal("item/mod-blueprint", candidate.icon)
       assert.are.equal("blueprint", candidate.record_type)
     end)
 
     it("returns nothing for an empty query", function()
-      assert.are.same({}, BlueprintLogic.build_candidates("", "en", locations, always_valid))
+      assert.are.same({}, BlueprintLogic.build_candidates("", locations, always_valid))
     end)
 
     it("shows Inventory as the second line of a top-level inventory candidate", function()
       local inv_locations = { { name = "inv", nodes = { node({ key = 1, type = "blueprint", label = "Solo" }) } } }
-      local candidate = by_id(BlueprintLogic.build_candidates("solo", "en", inv_locations, always_valid))["inv/1"]
+      local candidate = by_id(BlueprintLogic.build_candidates("solo", inv_locations, always_valid))["inv/1"]
 
       assert.are.same({ "gui.inventory" }, candidate.secondary_text)
       assert.is_nil(candidate.search_internal_name)
@@ -644,7 +644,7 @@ describe("BlueprintLogic", function()
         { name = "my", nodes = { node({ key = 1, type = "blueprint", label = "Solo" }) } },
         { name = "game", nodes = { node({ key = 2, type = "blueprint", label = "Solo" }) } },
       }
-      local candidates = by_id(BlueprintLogic.build_candidates("solo", "en", top_level_locations, always_valid))
+      local candidates = by_id(BlueprintLogic.build_candidates("solo", top_level_locations, always_valid))
 
       assert.are.same({ "gui-blueprint-library.private-shelf" }, candidates["my/1"].secondary_text)
       assert.is_nil(candidates["my/1"].search_internal_name)
@@ -666,8 +666,7 @@ describe("BlueprintLogic", function()
           },
         },
       }
-      local candidate =
-        by_id(BlueprintLogic.build_candidates("solo", "en", inv_book_locations, always_valid))["inv/1/2"]
+      local candidate = by_id(BlueprintLogic.build_candidates("solo", inv_book_locations, always_valid))["inv/1/2"]
 
       assert.are.equal("Book", candidate.search_internal_name)
       assert.are.same({ "", { "gui.inventory" }, " › " }, candidate.search_internal_prefix)
@@ -687,14 +686,14 @@ describe("BlueprintLogic", function()
     end
 
     it("pairs each map_ranges call with the origins of the field that matched", function()
-      BlueprintLogic.build_candidates("stations", "en", locations, always_valid)
+      BlueprintLogic.build_candidates("stations", locations, always_valid)
       local internal_call = map_ranges_call_for("[item=rail]鉄道 › Stations")
 
       assert.is_not_nil(internal_call)
       assert.is_true(#internal_call.ranges > 0)
 
       rich_text_calls.map_ranges = {}
-      BlueprintLogic.build_candidates("inbound", "en", locations, always_valid)
+      BlueprintLogic.build_candidates("inbound", locations, always_valid)
       local display_call = map_ranges_call_for("[virtual-signal=signal-input]Inbound")
 
       assert.is_not_nil(display_call)
