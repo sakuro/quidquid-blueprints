@@ -26,6 +26,6 @@ cannot write to the clipboard itself.
 
 Icons written into a name, such as `[item=rail]`, are searchable by what they
 show (`rail`) but never highlighted. A record without a name is not listed.
-The second line starts with where the entry is -- inventory, My blueprints or
-Game blueprints -- followed by the enclosing books, with all but the nearest
-shortened to its icon or first character; the full path is in the tooltip.
+The second line shows where the entry is (inventory, My blueprints or Game
+blueprints), then the enclosing books, all but the nearest shortened to an icon
+or first character. The tooltip shows the full path.

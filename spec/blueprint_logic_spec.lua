@@ -25,8 +25,8 @@ package.preload["__quidquid__.lib.api"] = function()
       return nil
     end
     -- The mock has no real scores to break a tie with, so display wins whenever it
-    -- matches -- mirroring the real Matcher:match, which only ever hands ranges back
-    -- for the field that won.
+    -- matches. The real Matcher:match likewise hands ranges back only for the field
+    -- that won.
     if display ~= nil then
       return { score = 1, display_ranges = display, internal_ranges = {} }
     end

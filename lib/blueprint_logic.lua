@@ -117,7 +117,7 @@ end
 --- The enclosing books' labels as a full path and an abbreviated one for display.
 ---
 --- Lua cannot measure rendered width, and the engine truncates an overflowing label
---- at its end -- which would cut off the nearest book first -- so the displayed path
+--- at its end, which would cut off the nearest book first. So the displayed path
 --- is always abbreviated: the nearest book in full, each one before it as a single
 --- unit. The two `_start` bytes locate the nearest book's label in each string, so
 --- match ranges over the full path can be carried onto the displayed one.
@@ -163,7 +163,7 @@ end
 local function record_node(key, record)
   local node = { key = key, type = record.type, label = record.label }
   -- An unlabelled record is never a candidate (build_candidates skips it), so its
-  -- description and icons are left unread -- describe() would call default_icons,
+  -- description and icons are left unread; describe() would call default_icons,
   -- which raises for a blank blueprint. A preview record has not been downloaded
   -- yet; only what the library itself shows before download (label, preview icons)
   -- is read from it.
@@ -367,8 +367,8 @@ local function build_candidate(matcher, node, id, ancestors, location_name, is_v
   end
   local location_label = LOCATION_NAMES[location_name]
   -- A top-level entry has no book path to show as the second line, so it names its
-  -- location there instead -- entries with the same label from different locations
-  -- (e.g. inventory vs. My blueprints) would otherwise be indistinguishable. A
+  -- location there instead. Otherwise entries with the same label from different
+  -- locations (e.g. inventory vs. My blueprints) would be indistinguishable. A
   -- candidate inside a book already has the book path for that line, so its location
   -- is prefixed onto that path instead of taking the line for itself.
   local secondary_text = path == nil and location_label or nil
