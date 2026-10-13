@@ -14,4 +14,5 @@ Search blueprints, blueprint books, deconstruction planners and upgrade planners
 | `Ctrl/Cmd` + left click | Show the export string |
 | `Alt` + right click | Copy into the inventory |
 
+Holding an item inside a book item in your inventory takes it out of the book rather than copying it.
 The export string is shown selected, ready to copy with `Ctrl/Cmd + C`.
