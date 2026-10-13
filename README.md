@@ -14,8 +14,5 @@ Search blueprints, blueprint books, deconstruction planners and upgrade planners
 | `Ctrl/Cmd` + left click | Show the export string |
 | `Alt` + right click | Copy into the inventory |
 
-A top-level inventory item is picked up itself and goes back to its slot on `Q`; an item inside a book item is taken out of the book instead, with no slot to return to. A library entry is held as a copy (no mod can put the entry itself in the cursor); clearing the cursor discards the copy, and placing it in a slot keeps it. Copying an inventory item into the inventory makes a duplicate.
-The export string is shown selected, ready to copy with `Ctrl/Cmd + C`; a mod cannot write to the clipboard itself.
-
-Icons written into a name, such as `[item=rail]`, are searchable by what they show (`rail`) but never highlighted. A record without a name is not listed.
-The second line shows where the entry is (inventory, My blueprints or Game blueprints), then the enclosing books, all but the nearest shortened to an icon or first character. The tooltip shows the full path.
+Holding an item inside a book item in your inventory takes it out of the book rather than copying it.
+The export string is shown selected, ready to copy with `Ctrl/Cmd + C`.
