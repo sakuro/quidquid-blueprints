@@ -20,7 +20,7 @@ jobs:
     permissions:
       contents: write      # Required for git tag push
 
-    environment: release   # Links to MOD Portal API key in protected environment
+    environment: release   # Links to mod portal API key in protected environment
 
     steps:
     - name: Checkout code
@@ -110,7 +110,7 @@ jobs:
         fi
 
     - name: Setup mise
-      uses: jdx/mise-action@2d8d4cafcbd33be2ea37d2b6f5ad595363d1f1ca # v5
+      uses: jdx/mise-action@6be3c7ed4c21d4f76b208d351d95aac273ebb76d # v5
 
     - name: Validate changelog.txt format
       run: factorix mod changelog check --release
